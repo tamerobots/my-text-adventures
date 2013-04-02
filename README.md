@@ -1,5 +1,6 @@
 my-text-adventures
 ==================
+NOT UPLOADED YET - WILL BE ONLINE AT SOME POINT SOON.
 
 A Website for the Generation and Hosting of Interactive Fiction. Final Year University Project. ASP.NET, HTML, CSS.
 
