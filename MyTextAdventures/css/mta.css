@@ -1,0 +1,324 @@
+/* David - MTA website...*/
+/*The body section sets the style of the main body*/
+body
+{
+    font-size: 12px;
+    font-family: Lucida Sans;
+    color: #B7DCFF;
+    background: white;
+    text-align: center;
+    min-width: 920px;
+    height: 100%;
+    padding-top: 5px;
+    margin: 0 auto;
+    padding: 0 auto;
+}
+
+div.treeview, div.treeview.td
+{
+    text-align: left;
+}
+
+div.header
+{
+    margin-left: 35px;
+    background: white;
+    width: 920px;
+    height: 75px;
+}
+img.logo, a.logolink
+{
+    border: none;
+    float: left;
+    vertical-align: bottom;
+}
+div#navigationdiv
+{
+    background: url(images/navbgtile.jpg) repeat top left;
+    float: right;
+}
+img.navfadeout
+{
+    margin-top: 35px;
+    float: left;
+}
+ul#navigation
+{
+    float: left;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+ul#navigation li
+{
+    background: url(../images/navbgtile.jpg) repeat top left;
+    float: left;
+    margin-top: 35px;
+    background-color: #005DB3;
+    padding: 10px;
+    height: 20px;
+}
+ul#navigation li a
+{
+    font: 13px Lucida sans unicode,sans-serif;
+    color: White;
+    vertical-align: middle;
+}
+ul#navigation li a:hover
+{
+    color: Yellow;
+}
+
+/*div#nontitlediv
+{width:inherit;
+ height:100%;
+
+ padding-bottom:40px;
+ background:url(images/nontitledivbg.jpg) repeat bottom left;
+}*/
+/*This sets the style of the navigation bar, a sub-cell of the main table*/
+div.menul
+{
+    font-weight: bold;
+    text-decoration: none;
+    width: 130px;
+    text-align: center;
+    float: left;
+    height: 100%;
+    padding: 0 auto;
+    margin-left: 35px;
+    padding-bottom: 80px;
+    background: url(../images/leftnavfadeout.png) no-repeat bottom left;
+    background-color: #035FB6;
+}
+
+/* this div is pointless but padding the central div
+             causes problems, so it is a hack. solve this later.*/
+/*this is also currently not in use as the 'padder' does not exist 
+           in the page */
+/* div.padder	
+           {
+           	float:left;
+	width:820px;
+	padding-right:5px;
+	padding-left:5px;
+	padding-bottom:30px;
+	    	}*/
+
+a.storynav, a.backnav
+{
+    color: yellow;
+}
+a.storynav:visited, a.backnav:visited
+{
+    color: yellow;
+}
+a.storynav:hover, a.backnav:hover
+{
+    color: #B4D5F4;
+}
+
+ul.securenavlist
+{
+    float: left;
+    list-style-type: none;
+    margin: 0;
+    padding: 5px;
+}
+
+h3
+{
+    padding: 0px;
+    margin: 0px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: Lucida Sans;
+}
+div.hint
+{
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding: 2px;
+    background-color: #81C2FF;
+    color: White;
+    font-size: 11px;
+    font-weight: normal;
+    font-family: Lucida Sans;
+    border: solid 1px white;
+}
+
+div.central
+{
+    float: left;
+    width: 790px;
+    height: 100%;
+    border-left: 30px;
+    border-right: 30px;
+    padding-bottom: 86px;
+    background: url(../images/bottomrightfadeout.png) no-repeat bottom right;
+    background-color: #035FB6;
+}
+/*this sets padding on text so that it doesn't come to the edge of 
+the page, or over it. add other elements to this*/
+p
+{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+h1
+{
+    color: White;
+    font-size: 15px;
+    clear: none;
+}
+h2
+{
+    color: White;
+    font-size: 12px;
+    font-style: italic;
+    text-align: left;
+    padding-left: 30px;
+}
+/* This section of CSS sets the style of the links in their various states*/
+a:active
+{
+    outline: none;
+}
+
+a:focus
+{
+    -moz-outline-style: none;
+}
+a:link
+{
+    font-size: small;
+    text-decoration: none;
+    color: white;
+    border: none;
+}
+a:visited
+{
+    font-size: small;
+    text-decoration: none;
+    color: #77A5E3;
+}
+a:hover
+{
+    font-size: small;
+    text-decoration: none;
+    color: yellow;
+}
+span.hider
+{
+    display: none;
+}
+table
+{
+    width: 100%;
+}
+/*title tables are for the main tutorial 
+text at the top of each author section page*/
+td.titletableleftright
+{
+    width: 20%;
+}
+td.titletablecenter
+{
+    width: 60%;
+    text-align: center;
+}
+table.contententry
+{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+td.left
+{
+    width: 50%;
+    vertical-align: top;
+    text-align: left;
+}
+td.right
+{
+    vertical-align: top;
+    text-align: left;
+    width: 50%;
+}
+td.buttons
+{
+    text-align: right;
+    width: 100%;
+}
+input.disabled
+{
+    background-color: Transparent;
+    width: 100px;
+}
+input.singlelinetextbox
+{
+    width: 250px;
+}
+textarea.multilinetextarea
+{
+    width: 400px;
+}
+span.warningtext
+{
+    color: Red;
+}
+p.navtitleseparator
+{
+    background: url(../images/navseparator.png) no-repeat bottom center;
+    height: 8px;
+    padding: 0px;
+    margin: 0px;
+}
+p.navseparator
+{
+    /*cannot have background images on nav separator in case links do not show up and end up creating separators for invisible links*/ /* background:url(../images/navseparator.png) no-repeat center;*/
+    height: 5px;
+    padding: 0px;
+    margin: 0px;
+}
+p.topleftcurve
+{
+    background: url(../images/roundedcorner.png) no-repeat top left;
+    height: 10px;
+    margin: 0px;
+    padding: 0px;
+}
+p.pagetext
+{
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+ul.pagetextlist li
+{
+    text-align: left;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+span.b
+{
+    color: White;
+    font-weight: bold;
+}
+p.tutorialtext
+{
+    text-align: left;
+    border: solid 1px #4A8CE6;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 2px;
+    background-color: #4A8CE6;
+    color: White;
+    font-weight: normal;
+    font-family: Lucida Sans;
+}

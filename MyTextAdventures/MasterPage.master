@@ -1,0 +1,58 @@
+﻿<%@ Master Language="VB" CodeFile="MasterPage.master.vb" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <link id="csslink" rel="stylesheet" type="text/css" href="css/mta.css" />
+    <link id="faviconlink1" runat="server" rel="shortcut icon" href="~/images/favicon.ico"
+        type="image/x-icon" />
+    <link id="faviconlink2" runat="server" rel="icon" href="~/images/favicon.ico" type="image/ico" />
+</head>
+<body>
+    <form runat="server">
+    <div class="header">
+        <a id="logolink" runat="server" href="~/Default.aspx">
+            <asp:Image runat="server" CssClass="logo" ImageUrl="~/Images/logo.png" alt="logo" /></a>
+        <div id="navigationdiv">
+            <asp:Image runat="server" CssClass="navfadeout" ImageUrl="~/Images/navfadeout.jpg"
+                alt="fadeout image" />
+            <ul id="navigation">
+                <li><a runat="server" href="~/Play.aspx">Play a game</a></li>
+                <li><a runat="server" href="~/FAQ.aspx">FAQ</a></li>
+                <li><a runat="server" href="~/HowToPlay.aspx">How to Play</a></li>
+                <li><a runat="server" href="~/Tutorial.aspx">Author Tutorial</a></li>
+                <li id="login-nav">
+
+                    <asp:HyperLink ID="LoginLink" NavigateUrl="~/Login.aspx" Text="Login" runat="server" />
+                    <asp:LinkButton ID="LogoutLink" runat="server" />
+                    <%--<asp:Label ID="LoginUserName" runat="server"  CssClass="usernamelabel" />--%>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="menul" runat="server">
+        <%--    <asp:SiteMapDataSource ID="SiteMapDataSource1" Runat="server" />
+              <asp:Menu ID="Menu1" runat="server" DataSourceID="SiteMapDataSource1">
+              </asp:Menu>
+  <asp:TreeView ID="NavTreeView" Runat="Server" ExpandDepth="1" NodeIndent="5"  ShowLines="false"  CssClass="treeview" DataSourceID="SiteMapDataSource1">
+  </asp:TreeView> --%>
+        <p class="topleftcurve">
+        </p>
+        Navigation<br />
+        <p class="navtitleseparator">
+        </p>
+        <a runat="server" href="~/Secure/AuthorHome.aspx" class="storynav">Author Home</a>
+        <br />
+        <asp:ContentPlaceHolder ID="leftmenu" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    <!-- start of main middle section of page-->
+    <div class="central">
+        <%--	<div class="padder">--%>
+        <asp:ContentPlaceHolder ID="main" runat="server">
+        </asp:ContentPlaceHolder>
+        <%-- footer text could go here?--%>
+    </div>   
+    </form>
+</body>
+</html>

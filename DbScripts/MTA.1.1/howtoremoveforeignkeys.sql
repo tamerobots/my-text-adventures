@@ -1,0 +1,2 @@
+ALTER TABLE Orders
+DROP FOREIGN KEY fk_PerOrders
