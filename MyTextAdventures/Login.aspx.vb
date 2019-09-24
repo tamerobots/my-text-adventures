@@ -13,7 +13,7 @@ Partial Class Login
         command.CommandText = strSQL
         command.Parameters.Add(New MySqlParameter("@inputUser", inputUser))
         command.Parameters.Add(New MySqlParameter("@inputpwd", inputPwd))
-        Dim DBConnection = New MySqlConnection("server=localhost; user id=adminuser; password=!ifdb117; database=mta; pooling=false;")
+        Dim DBConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
         Dim DataReader As MySqlDataReader
         command.Connection = DBConnection
         command.CommandType = CommandType.Text

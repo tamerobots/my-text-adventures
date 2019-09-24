@@ -9,8 +9,7 @@ Namespace DAL
             'This can be used by subclasses that inherit this class to execute SQL select, insert, delete etc statements
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = strSQL
-            'Dim myConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
-            Dim myConnection = New MySqlConnection("server=localhost; user id=adminuser; password=!ifdb117; database=mta; pooling=false;")
+            Dim myConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
             command.Connection = myConnection
             command.CommandType = CommandType.Text
             myConnection.Open()
@@ -27,11 +26,14 @@ Namespace DAL
         Public Function GetObjectDataSet(ByVal inputType As Type, ByVal inputPK As String, ByVal inputID As String) As DataSet
             'Return a dataset for use populating gridviews using primary key name + primary key value + table name via type
             Dim strSQL As String
-            strSQL = "SELECT * FROM " + inputType.Name
-            strSQL += " WHERE " + inputPK + "= '" + inputID + "'"
+            strSQL = "SELECT * FROM @inputTypeName"
+            strSQL += " WHERE inputPK = @inputID"
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
-            command.CommandText = strSQL
-            Dim myConnection = New MySqlConnection("server=localhost; user id=adminuser; password=!ifdb117; database=mta; pooling=false;")
+            command.CommandText = strSQL            
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@inputID", inputID))
+
+            Dim myConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
             command.Connection = myConnection
             command.CommandType = CommandType.Text
             myConnection.Open()
@@ -47,7 +49,7 @@ Namespace DAL
             'Have option to get dataset via sql statement
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = inputSQL
-            Dim myConnection = New MySqlConnection("server=localhost; user id=adminuser; password=!ifdb117; database=mta; pooling=false;")
+            Dim myConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
             command.Connection = myConnection
             command.CommandType = CommandType.Text
             myConnection.Open()
@@ -62,11 +64,14 @@ Namespace DAL
         Public Sub Delete(ByVal inputType As Type, ByVal inputPK As String, ByVal inputID As String)
             'deletes any record from any table according to parameters
             Dim strSQL As String
-            strSQL = "DELETE FROM " + inputType.Name
-            strSQL += " WHERE " + inputPK + "= '" + inputID + "'"
+            strSQL = "DELETE FROM @inputTypeName"
+            strSQL += " WHERE @inputPK = @inputID"
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = strSQL
-            Dim myConnection = New MySqlConnection("server=localhost; user id=adminuser; password=!ifdb117; database=mta; pooling=false;")
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@inputID", inputID))
+            command.Parameters.Add(New MySqlParameter("@inputPK", inputPK))
+            Dim myConnection = New MySqlConnection(ConfigurationManager.ConnectionStrings("MTAConnectionString").ConnectionString)
             command.Connection = myConnection
             command.CommandType = CommandType.Text
             myConnection.Open()
