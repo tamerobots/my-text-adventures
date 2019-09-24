@@ -6,16 +6,27 @@ Namespace DAL
 
         Private strSQL As String
         Public Sub Add(ByVal input As BE.Item)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.ItemId & _
-             "', '" + input.ItemName & _
-             "', '" + input.Description & _
-             "', '" + input.LongDescription & _
-             "', '" + input.ParentStateId & _
-             "', '" + input.Hint & _
-             "', '" + input.StoryId & _
+            strSQL = "INSERT INTO @inputTypeName"
+            strSQL += " VALUES ('@ItemId & _
+             "', '@ItemName & _
+             "', '@Description & _
+             "', '@LongDescription & _
+             "', '@ParentStateId & _
+             "', '@Hint & _
+             "', '@StoryId & _
                   "')"
-            MyBase.ExecuteCommand(strSQL)
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", input.GetType.Name))
+            command.Parameters.Add(New MySqlParameter("@ItemName, input.ItemName))
+            command.Parameters.Add(New MySqlParameter("@Description, input.Description))
+            command.Parameters.Add(New MySqlParameter("@LongDescription, input.LongDescription))
+            command.Parameters.Add(New MySqlParameter("@ParentStateId, input.ParentStateId))
+            command.Parameters.Add(New MySqlParameter("@Hint, input.Hint))
+            command.Parameters.Add(New MySqlParameter("@StoryId, input.StoryId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetItem(ByVal ItemId As String) As BE.Item
@@ -39,35 +50,48 @@ Namespace DAL
         End Function
 
         Public Function getItemsbyParentStateId(ByVal ParentStateId As String) As DataSet
-            Dim STRSQL As String = "SELECT I.* " & _
+            Dim strSQL As String = "SELECT I.* " & _
             "FROM Item AS I " & _
-            "WHERE I.ParentStateId = '" + ParentStateId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
+            "WHERE I.ParentStateId = '@ParentStateId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@ParentStateId", ParentStateId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Function getItemsbyStoryId(ByVal StoryId As String) As DataSet
-            Dim STRSQL As String = "SELECT I.* " & _
+            Dim strSQL As String = "SELECT I.* " & _
             "FROM Item AS I " & _
-            "WHERE I.StoryId = '" + StoryId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
+            "WHERE I.StoryId = '@StoryId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@StoryId", StoryId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Sub Update(ByVal input As BE.Item)
             strSQL = "UPDATE " + input.GetType.Name.ToString + " "
             strSQL += "SET " & _
-            "ItemId='" + input.ItemId & _
-            "', ItemName='" + input.ItemName & _
-            "', Description='" + input.Description & _
-            "', longDescription='" + input.LongDescription & _
-            "', ParentStateId='" + input.ParentStateId & _
-            "', hint='" + input.Hint & _
-            "', StoryId='" + input.StoryId & _
-            "' WHERE ItemId='" + input.ItemId + "'"
+            "ItemId='@ItemId'"
+            "', ItemName='@ItemName'"
+            "', Description='@Description'"
+            "', longDescription='@LongDescription'"
+            "', ParentStateId='@ParentStateId'"
+            "', hint='@Hint'"
+            "', StoryId='@StoryId'"
+            "' WHERE ItemId='@ItemId'"
 
-            MyBase.ExecuteCommand(strSQL)
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@ItemId", input.ItemId ))
+            command.Parameters.Add(New MySqlParameter("@ItemName, input.ItemName))
+            command.Parameters.Add(New MySqlParameter("@Description, input.Description))
+            command.Parameters.Add(New MySqlParameter("@LongDescription, input.LongDescription))
+            command.Parameters.Add(New MySqlParameter("@ParentStateId, input.ParentStateId))
+            command.Parameters.Add(New MySqlParameter("@Hint, input.Hint))
+            command.Parameters.Add(New MySqlParameter("@StoryId, input.StoryId))
+            MyBase.ExecuteCommand(command)
         End Sub
-
-
 
         Public Overloads Sub Delete(ByVal Itemid As String)
             MyBase.Delete(GetType(BE.Item), "ItemId", Itemid)

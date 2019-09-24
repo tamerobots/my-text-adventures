@@ -9,21 +9,37 @@ Namespace DAL
         Private strSQL As String
         Public Sub Add(ByVal input As BE.EntityState)
             strSQL = "INSERT INTO " + input.GetType.Name.ToString & _
-             " VALUES ('" + input.EntityStateId & _
-             "', '" + input.EntityStateName & _
-             "', '" + input.EntityId & _
-             "', '" + input.Description & _
-             "', '" + input.LongDescription & _
-             "', " + input.Visible.ToString & _
-             ", '" + input.ActivationVerb & _
-             "', '" + input.ActivationText & _
-             "', " + input.PointsAwarded.ToString & _
-             ", " + input.VerbUpdatesRoomState.ToString & _
-             ", '" + input.Hint & _
-             "', '" + input.NextEntityStateId & _
-             "', '" + input.ItemIdRequiredforRoomStateUpdate & _
+             " VALUES ('@EntityStateId & _
+             "', '@EntityStateName & _
+             "', '@EntityId & _
+             "', '@Description & _
+             "', '@LongDescription & _
+             "', @Visible.ToString & _
+             ", '@ActivationVerb & _
+             "', '@ActivationText & _
+             "', @PointsAwarded.ToString & _
+             ", @VerbUpdatesRoomState.ToString & _
+             ", '@Hint & _
+             "', '@NextEntityStateId & _
+             "', '@ItemIdRequiredforRoomStateUpdate & _
              "')"
-            MyBase.ExecuteCommand(strSQL)
+              Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MYSqlParameter("@EntityStateId", input.EntityStateId)
+            command.Parameters.Add(New MYSqlParameter("@EntityStateName", input.EntityStateName)
+            command.Parameters.Add(New MYSqlParameter("@EntityId", input.EntityId)
+            command.Parameters.Add(New MYSqlParameter("@Description", input.Description)
+            command.Parameters.Add(New MYSqlParameter("@LongDescription", input.LongDescription)
+            command.Parameters.Add(New MYSqlParameter("@Visib", input.Visible)
+            command.Parameters.Add(New MYSqlParameter("@ActivationVerb", input.ActivationVerb)
+            command.Parameters.Add(New MYSqlParameter("@ActivationText", input.ActivationText)
+            command.Parameters.Add(New MYSqlParameter("@PointsAward", input.PointsAwarded)
+            command.Parameters.Add(New MYSqlParameter("@VerbUpdatesRoomSta", input.VerbUpdatesRoomState)
+            command.Parameters.Add(New MYSqlParameter("@Hint", input.Hint)
+            command.Parameters.Add(New MYSqlParameter("@NextEntityStateId", input.NextEntityStateId)
+            command.Parameters.Add(New MYSqlParameter("@ItemIdRequiredforRoomStateUpdate", input.ItemIdRequiredforRoomStateUpdate)
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetEntityState(ByVal EntityStateId As String) As BE.EntityState
@@ -87,29 +103,49 @@ Namespace DAL
         End Function
 
         Public Sub Update(ByVal input As BE.EntityState)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " " & _
-            "SET EntityStateid='" + input.EntityStateId & _
-            "', EntityStateName='" + input.EntityStateName & _
-            "', EntityId='" + input.EntityId & _
-            "', Description='" + input.Description & _
-            "', longDescription='" + input.LongDescription & _
-            "', Visible=" + input.Visible.ToString & _
-            ", ActivationVerb='" + input.ActivationVerb & _
-            "', ActivationText='" + input.ActivationText & _
-            "', PointsAwarded=" + input.PointsAwarded.ToString & _
-            ", VerbUpdatesRoomState=" + input.VerbUpdatesRoomState.ToString & _
-            ", Hint='" + input.Hint & _
-            "', NextEntityStateId='" + input.NextEntityStateId & _
-            "', ItemIdRequiredforRoomStateUpdate='" + input.ItemIdRequiredforRoomStateUpdate & _
-            "' WHERE EntityStateid='" + input.EntityStateId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            strSQL = "UPDATE @Name " & _
+            "SET EntityStateid='@EntityStateId & _
+            "', EntityStateName='@EntityStateName & _
+            "', EntityId='@EntityId & _
+            "', Description='@Description & _
+            "', longDescription='@LongDescription & _
+            "', Visible=@Visible.ToString & _
+            ", ActivationVerb='@ActivationVerb & _
+            "', ActivationText='@ActivationText & _
+            "', PointsAwarded=@PointsAwarded.ToString & _
+            ", VerbUpdatesRoomState=@VerbUpdatesRoomState.ToString & _
+            ", Hint='@Hint & _
+            "', NextEntityStateId='@NextEntityStateId & _
+            "', ItemIdRequiredforRoomStateUpdate='@ItemIdRequiredforRoomStateUpdate & _
+            "' WHERE EntityStateid='@EntityStateId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@Name", input.Name))
+            command.Parameters.Add(New MySqlParameter("@EntityStateid, input.EntityStateId))
+            command.Parameters.Add(New MySqlParameter("@EntityStateName, input.EntityStateName ))
+            command.Parameters.Add(New MySqlParameter("@EntityId, input.EntityId ))
+            command.Parameters.Add(New MySqlParameter("@Description, input.Description ))
+            command.Parameters.Add(New MySqlParameter("@longDescription, input.LongDescription ))
+            command.Parameters.Add(New MySqlParameter("@Visible, input.Visible.ToString ))
+            command.Parameters.Add(New MySqlParameter("@ActivationVerb=, input.ActivationVerb ))
+            command.Parameters.Add(New MySqlParameter("@ActivationText, input.ActivationText ))
+            command.Parameters.Add(New MySqlParameter("@PointsAwarded, input.PointsAwarded.ToString ))
+            command.Parameters.Add(New MySqlParameter("@VerbUpdatesRoomState=, input.VerbUpdatesRoomState.ToString ))
+            command.Parameters.Add(New MySqlParameter("@Hint=, input.Hint ))
+            command.Parameters.Add(New MySqlParameter("@NextEntityStateId, input.NextEntityStateId ))
+            command.Parameters.Add(New MySqlParameter("@ItemIdRequiredforRoomStateUpdate, input.ItemIdRequiredforRoomStateUpdate ))
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function getEntityStatesbyEntityId(ByVal EntityId As String) As DataSet
             Dim STRSQL As String = "SELECT ES.* " & _
             "FROM EntityState AS ES " & _
-            "WHERE ES.EntityId = '" + EntityId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
+            "WHERE ES.EntityId = '@EntityId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@EntityId", EntityId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Overloads Sub Delete(ByVal EntityStateid As String)
