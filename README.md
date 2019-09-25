@@ -17,16 +17,15 @@ Read the mit-licence file for the licence.
 Contact me at dave@tamerobots.com if you'd like to ask me any questions about it.
 
 Screenshots
-==================
+----------
 
-Author Screen
--------------
+#### Author Screen
+
 
 This is the Author Screen, where Authors create their text adventure using the Author interface.
 ![alt text](https://raw.githubusercontent.com/tamerobots/my-text-adventures/master/MTAcap1.jpg "My Text Adventures Author Screen")
 
-Play Screen
--------------
+#### Play Screen
 
 This is the Play Screen, where Players can play the stories made by the Authors, using the terminal-like interface.
 ![alt text](https://raw.githubusercontent.com/tamerobots/my-text-adventures/master/MTAcap3.jpg "My Text Adventures Play Screen")
