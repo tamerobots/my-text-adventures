@@ -7,13 +7,22 @@ Namespace DAL
         Private strSQL As String
 
         Public Sub Add(ByVal input As BE.PlayerEntityStateRecord)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.PlayerEntityStateRecordId & _
-                "', '" + input.PlayerId & _
-                "', '" + input.EntityStateId & _
-                "', '" + input.EntityId & _
+            strSQL = "INSERT INTO @inputTypeName"
+            strSQL += " VALUES ('@PlayerEntityStateRecordId" & _
+                "', '@PlayerId" & _
+                "', '@EntityStateId" & _
+                "', '@EntityId" & _
                 "')"
-            MyBase.ExecuteCommand(strSQL)
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@PlayerEntityStateRecordId", input.PlayerEntityStateRecordId))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId))
+            command.Parameters.Add(New MySqlParameter("@EntityStateId", input.EntityStateId))
+            command.Parameters.Add(New MySqlParameter("@EntityId", input.EntityId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetPlayerEntityStateRecord(ByVal PlayerEntityStateRecordId As String) As BE.PlayerEntityStateRecord
@@ -40,9 +49,14 @@ Namespace DAL
             strSQL = "SELECT PRS.* " & _
             "FROM PlayerEntityStateRecord AS PRS " & _
             "INNER JOIN Player AS P ON P.PlayerId = PRS.PlayerId " & _
-            "WHERE PRS.EntityId = '" + inputEntityId + "'" & _
-            "AND P.PlayerId = '" + PlayerId + "'"
-            PRSDS = MyBase.GetObjectDataSet(strSQL)
+            "WHERE PRS.EntityId = @inputEntityId " & _
+            "AND P.PlayerId = @PlayerId"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputEntityId", input.inputEntityId))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId))
+            PRSDS = MyBase.GetObjectDataSet(command)
+
             If Not PRSDS.Tables(0).Rows.Count = 0 Then
                 Dim row As DataRow = PRSDS.Tables(0).Rows(0)
                 With output
@@ -58,14 +72,23 @@ Namespace DAL
         End Function
 
         Public Sub Update(ByVal input As BE.PlayerEntityStateRecord)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
+            strSQL = "UPDATE @inputTypeName "
             strSQL += "SET " & _
-            "PlayerEntityStateRecordId='" + input.PlayerEntityStateRecordId & _
-            "', PlayerId='" + input.PlayerId & _
-            "', EntityStateId='" + input.EntityStateId & _
-            "', EntityId='" + input.EntityId & _
-            "' WHERE PlayerEntityStateRecordId='" + input.PlayerEntityStateRecordId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            "PlayerEntityStateRecordId='@PlayerEntityStateRecordId" & _
+            "', PlayerId='@PlayerId" & _
+            "', EntityStateId='@EntityStateId" & _
+            "', EntityId='@EntityId" & _
+            "' WHERE PlayerEntityStateRecordId='@PlayerEntityStateRecordId'"
+            
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@PlayerEntityStateRecordId", input.PlayerEntityStateRecordId))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId))
+            command.Parameters.Add(New MySqlParameter("@EntityStateId", input.EntityStateId))
+            command.Parameters.Add(New MySqlParameter("@EntityId", input.EntityId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
     End Class
 End Namespace

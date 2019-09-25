@@ -7,21 +7,35 @@ Namespace DAL
         Private strSQL As String
 
         Public Sub Add(ByVal input As BE.PlayerInventory)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.PlayerInventoryId & _
-                "', '" + input.PlayerId & _
-                "', '" + input.ItemId & _
+            strSQL = "INSERT INTO @inputTypeName"
+            strSQL += " VALUES ('@PlayerInventoryId" & _
+                "', '@PlayerId" & _
+                "', '@ItemId" & _
                 "')"
-            MyBase.ExecuteCommand(strSQL)
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@PlayerInventoryId", input.PlayerInventoryId ))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId & _
+            command.Parameters.Add(New MySqlParameter("@ItemId", input.ItemId & _
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetPlayerFullInventoryByPlayerIdStoryId(ByVal playerid As String, ByVal storyid As String) As DataSet
-            Dim STRSQL As String = "SELECT PI.* " & _
+            Dim strSQL As String = "SELECT PI.* " & _
            "FROM PlayerInventory AS PI " & _
            "INNER JOIN Item AS I ON I.ItemId = PI.ItemId " & _
-           "WHERE PI.PlayerId = '" + playerid + "' " & _
-           "AND I.StoryId='" + storyid + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
+           "WHERE PI.PlayerId = '@playerId' " & _
+           "AND I.StoryId='@Storyid'"
+
+           Dim command As New MySql.Data.MySqlClient.MySqlCommand
+           command.CommandText = strSQL
+           command.Parameters.Add(New MySqlParameter("@PlayerId", playerId))
+           command.Parameters.Add(New MySqlParameter("@StoryId", storyId))
+           Return MyBase.GetObjectDataSet(command)
+
         End Function
 
         Public Function GetPlayerInventory(ByVal PlayerInventoryId As String) As BE.PlayerInventory
@@ -46,9 +60,14 @@ Namespace DAL
             Dim output As New BE.PlayerInventory
             strSQL = "SELECT PI.* " & _
             "FROM PlayerInventory AS PI " & _
-            "WHERE PI.ItemId = '" + inputItemId + "' " & _
-            "AND PI.PlayerId = '" + inputPlayerId + "'"
-            PRSDS = MyBase.GetObjectDataSet(strSQL)
+            "WHERE PI.ItemId = '@inputItemId' " & _
+            "AND PI.PlayerId = '@inputPlayerId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputPlayerId", inputPlayerId))
+            command.Parameters.Add(New MySqlParameter("@inputItemId", inputItemId))
+            PRSDS = MyBase.GetObjectDataSet(command)
+
             If Not PRSDS.Tables(0).Rows.Count = 0 Then
                 Dim row As DataRow = PRSDS.Tables(0).Rows(0)
                 With output
@@ -62,13 +81,21 @@ Namespace DAL
         End Function
 
         Public Sub Update(ByVal input As BE.PlayerInventory)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
+            strSQL = "UPDATE @inputName "
             strSQL += "SET " & _
-            "PlayerInventoryId='" + input.PlayerInventoryId & _
-            "', PlayerId='" + input.PlayerId & _
-            "', ItemId='" + input.ItemId & _
-            "' WHERE PlayerInventoryId='" + input.PlayerInventoryId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            "PlayerInventoryId='@PlayerInventoryId" & _
+            "', PlayerId='@PlayerId" & _
+            "', ItemId='@ItemId" & _
+            "' WHERE PlayerInventoryId='@PlayerInventoryId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputName", input.GetType.Name.ToString))
+            command.Parameters.Add(New MySqlParameter("@PlayerInventoryId", input.PlayerInventoryId))
+            command.Parameters.Add(New MySqlParameter("@ItemId", input.ItemId))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId))
+            MyBase.ExecuteCommand(command)
         End Sub
     End Class
 End Namespace
+

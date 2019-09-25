@@ -8,12 +8,12 @@ Namespace DAL
         Public Sub Add(ByVal input As BE.Item)
             strSQL = "INSERT INTO @inputTypeName"
             strSQL += " VALUES ('@ItemId & _
-             "', '@ItemName & _
-             "', '@Description & _
-             "', '@LongDescription & _
-             "', '@ParentStateId & _
-             "', '@Hint & _
-             "', '@StoryId & _
+             "', '@ItemName" & _
+             "', '@Description" & _
+             "', '@LongDescription" & _
+             "', '@ParentStateId" & _
+             "', '@Hint" & _
+             "', '@StoryId" & _
                   "')"
 
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
@@ -70,26 +70,27 @@ Namespace DAL
         End Function
 
         Public Sub Update(ByVal input As BE.Item)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
+            strSQL = "UPDATE @inputTypeName "
             strSQL += "SET " & _
-            "ItemId='@ItemId'"
-            "', ItemName='@ItemName'"
-            "', Description='@Description'"
-            "', longDescription='@LongDescription'"
-            "', ParentStateId='@ParentStateId'"
-            "', hint='@Hint'"
-            "', StoryId='@StoryId'"
+            "ItemId='@ItemId'" & _
+            "', ItemName='@ItemName'" & _
+            "', Description='@Description'" & _
+            "', longDescription='@LongDescription'" & _
+            "', ParentStateId='@ParentStateId'" & _
+            "', hint='@Hint'" & _
+            "', StoryId='@StoryId'" & _
             "' WHERE ItemId='@ItemId'"
 
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
             command.Parameters.Add(New MySqlParameter("@ItemId", input.ItemId ))
-            command.Parameters.Add(New MySqlParameter("@ItemName, input.ItemName))
-            command.Parameters.Add(New MySqlParameter("@Description, input.Description))
-            command.Parameters.Add(New MySqlParameter("@LongDescription, input.LongDescription))
-            command.Parameters.Add(New MySqlParameter("@ParentStateId, input.ParentStateId))
-            command.Parameters.Add(New MySqlParameter("@Hint, input.Hint))
-            command.Parameters.Add(New MySqlParameter("@StoryId, input.StoryId))
+            command.Parameters.Add(New MySqlParameter("@ItemName", input.ItemName))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description))
+            command.Parameters.Add(New MySqlParameter("@LongDescription", input.LongDescription))
+            command.Parameters.Add(New MySqlParameter("@ParentStateId", input.ParentStateId))
+            command.Parameters.Add(New MySqlParameter("@Hint", input.Hint))
+            command.Parameters.Add(New MySqlParameter("@StoryId", input.StoryId))
             MyBase.ExecuteCommand(command)
         End Sub
 

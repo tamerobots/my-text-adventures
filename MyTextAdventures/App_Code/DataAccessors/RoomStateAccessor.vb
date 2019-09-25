@@ -1,4 +1,4 @@
-﻿Imports Microsoft.VisualBasic
+Imports Microsoft.VisualBasic
 Imports System.Data
 Namespace DAL
 
@@ -7,21 +7,38 @@ Namespace DAL
 
         Private strSQL As String
         Public Sub Add(ByVal input As BE.RoomState)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.RoomStateId & _
-             "', '" + input.RoomStateName & _
-             "', '" + input.ParentRoomId & _
-             "', " + input.canGoNorth.ToString & _
-             "," + input.canGoEast.ToString & _
-             "," + input.canGoSouth.ToString & _
-             "," + input.canGoWest.ToString & _
-             ", " + input.PointsAwarded.ToString & _
-             ", '" + input.Description & _
-             "', '" + input.LongDescription & _
-             "', " + input.isEndGameTrigger.ToString & _
-             ", '" + input.nextRoomStateId & _
+            strSQL = "INSERT INTO @inputTypeName"
+            strSQL += " VALUES ('@RoomStateId" & _
+             "', '@RoomStateName" & _
+             "', '@ParentRoomId" & _
+             "', @canGoNorth" & _
+             ",@canGoEast" & _
+             ",@canGoSouth" & _
+             ",@canGoWest" & _
+             ", @PointsAwarded" & _
+             ", '@Description" & _
+             "', '@LongDescription" & _
+             "', @isEndGameTrigger" & _
+             ", '@nextRoomStateId" & _
              "')"
-            MyBase.ExecuteCommand(strSQL)
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", input.GetType.Name.ToString))
+            command.Parameters.Add(New MySqlParameter("@RoomStateId", input.RoomStateId))
+            command.Parameters.Add(New MySqlParameter("@RoomStateName", input.RoomStateName))
+            command.Parameters.Add(New MySqlParameter("@ParentRoomId", input.ParentRoomId))
+            command.Parameters.Add(New MySqlParameter("@canGoNorth", input.canGoNorth))
+            command.Parameters.Add(New MySqlParameter("@canGoEast", input.canGoEast))
+            command.Parameters.Add(New MySqlParameter("@canGoSouth", input.canGoSouth))
+            command.Parameters.Add(New MySqlParameter("@canGoWest", input.canGoWest))
+            command.Parameters.Add(New MySqlParameter("@PointsAwarded", input.PointsAwarded))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description))
+            command.Parameters.Add(New MySqlParameter("@LongDescription", input.LongDescription))
+            command.Parameters.Add(New MySqlParameter("@isEndGameTrigger", input.isEndGameTrigger))
+            command.Parameters.Add(New MySqlParameter("@nextRoomStateId", input.nextRoomStateId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetRoomState(ByVal RoomStateId As String) As BE.RoomState
@@ -51,31 +68,51 @@ Namespace DAL
         End Function
 
         Public Function getRoomStatesbyRoomId(ByVal RoomId As String) As DataSet
-            Dim STRSQL As String = "SELECT R.* " & _
+            Dim strSQL As String = "SELECT R.* " & _
             "FROM RoomState AS R " & _
-            "WHERE R.ParentRoomId = '" + RoomId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
-            ' Dim mysql As New MySql.Data.MySqlClient.MySqlCommand
+            "WHERE R.ParentRoomId = '@RoomId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@RoomId", input.RoomId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Sub Update(ByVal input As BE.RoomState)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
-            strSQL += "SET " & _
-            "RoomStateId='" + input.RoomStateId & _
-            "', RoomStateName='" + input.RoomStateName & _
-            "', ParentRoomId='" + input.ParentRoomId & _
-            "', canGoNorth=" + input.canGoNorth.ToString & _
-            ", canGoEast=" + input.canGoEast.ToString & _
-            ", canGoSouth=" + input.canGoSouth.ToString & _
-            ", canGoWest=" + input.canGoWest.ToString & _
-            ", PointsAwarded=" + input.PointsAwarded.ToString & _
-            ", Description='" + input.Description & _
-            "', LongDescription='" + input.LongDescription & _
-            "', isEndGameTrigger=" + input.isEndGameTrigger.ToString & _
-            ", nextroomstateid='" + input.nextRoomStateId & _
-            "' WHERE RoomStateId='" + input.RoomStateId + "'"
+            strSQL = "UPDATE @inputTypeName"
+            strSQL += " SET " & _
+            "RoomStateId='@RoomStateId" & _
+            "', RoomStateName='@RoomStateName" & _
+            "', ParentRoomId='@ParentRoomId" & _
+            "', canGoNorth=@canGoNorth" & _
+            ", canGoEast=@canGoEast" & _
+            ", canGoSouth=@canGoSouth" & _
+            ", canGoWest=@canGoWest" & _
+            ", PointsAwarded=@PointsAwarded" & _
+            ", Description='@Description" & _
+            "', LongDescription='@LongDescription" & _
+            "', isEndGameTrigger=@isEndGameTrigger" & _
+            ", nextroomstateid='@nextRoomStateId" & _
+            "' WHERE RoomStateId='@RoomStateId"
 
-            MyBase.ExecuteCommand(strSQL)
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@RoomId", input.RoomId))
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", input.GetType.Name.ToString))
+            command.Parameters.Add(New MySqlParameter("@RoomStateId", input.RoomStateId ))
+            command.Parameters.Add(New MySqlParameter("@RoomStateName", input.RoomStateName))
+            command.Parameters.Add(New MySqlParameter("@ParentRoomId", input.ParentRoomId))
+            command.Parameters.Add(New MySqlParameter("@canGoNorth", input.canGoNorth))
+            command.Parameters.Add(New MySqlParameter("@canGoEast", input.canGoEast))
+            command.Parameters.Add(New MySqlParameter("@canGoSouth", input.canGoSouth))
+            command.Parameters.Add(New MySqlParameter("@canGoWest", input.canGoWest))
+            command.Parameters.Add(New MySqlParameter("@PointsAwarded", input.PointsAwarded))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description))
+            command.Parameters.Add(New MySqlParameter("@LongDescription", input.LongDescription))
+            command.Parameters.Add(New MySqlParameter("@isEndGameTrigger", input.isEndGameTrigger))
+            command.Parameters.Add(New MySqlParameter("@nextRoomStateId", input.nextRoomStateId))
+            
+            MyBase.ExecuteCommand(command)
         End Sub
 
 

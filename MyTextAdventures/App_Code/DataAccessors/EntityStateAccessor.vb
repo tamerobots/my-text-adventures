@@ -8,20 +8,20 @@ Namespace DAL
 
         Private strSQL As String
         Public Sub Add(ByVal input As BE.EntityState)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString & _
+            strSQL = "INSERT INTO @inputTypeName" & _
              " VALUES ('@EntityStateId & _
-             "', '@EntityStateName & _
-             "', '@EntityId & _
-             "', '@Description & _
-             "', '@LongDescription & _
-             "', @Visible.ToString & _
-             ", '@ActivationVerb & _
-             "', '@ActivationText & _
-             "', @PointsAwarded.ToString & _
-             ", @VerbUpdatesRoomState.ToString & _
-             ", '@Hint & _
-             "', '@NextEntityStateId & _
-             "', '@ItemIdRequiredforRoomStateUpdate & _
+             "', '@EntityStateName" & _
+             "', '@EntityId" & _
+             "', '@Description" & _
+             "', '@LongDescription" & _
+             "', @Visible" & _
+             ", '@ActivationVerb" & _
+             "', '@ActivationText" & _
+             "', @PointsAwarded" & _
+             ", @VerbUpdatesRoomState" & _
+             ", '@Hint" & _
+             "', '@NextEntityStateId" & _
+             "', '@ItemIdRequiredforRoomStateUpdate" & _
              "')"
               Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = strSQL
@@ -122,19 +122,19 @@ Namespace DAL
             Dim command As New MySql.Data.MySqlClient.MySqlCommand
             command.CommandText = strSQL
             command.Parameters.Add(New MySqlParameter("@Name", input.Name))
-            command.Parameters.Add(New MySqlParameter("@EntityStateid, input.EntityStateId))
-            command.Parameters.Add(New MySqlParameter("@EntityStateName, input.EntityStateName ))
-            command.Parameters.Add(New MySqlParameter("@EntityId, input.EntityId ))
-            command.Parameters.Add(New MySqlParameter("@Description, input.Description ))
-            command.Parameters.Add(New MySqlParameter("@longDescription, input.LongDescription ))
-            command.Parameters.Add(New MySqlParameter("@Visible, input.Visible.ToString ))
-            command.Parameters.Add(New MySqlParameter("@ActivationVerb=, input.ActivationVerb ))
-            command.Parameters.Add(New MySqlParameter("@ActivationText, input.ActivationText ))
-            command.Parameters.Add(New MySqlParameter("@PointsAwarded, input.PointsAwarded.ToString ))
-            command.Parameters.Add(New MySqlParameter("@VerbUpdatesRoomState=, input.VerbUpdatesRoomState.ToString ))
-            command.Parameters.Add(New MySqlParameter("@Hint=, input.Hint ))
-            command.Parameters.Add(New MySqlParameter("@NextEntityStateId, input.NextEntityStateId ))
-            command.Parameters.Add(New MySqlParameter("@ItemIdRequiredforRoomStateUpdate, input.ItemIdRequiredforRoomStateUpdate ))
+            command.Parameters.Add(New MySqlParameter("@EntityStateid", input.EntityStateId))
+            command.Parameters.Add(New MySqlParameter("@EntityStateName", input.EntityStateName ))
+            command.Parameters.Add(New MySqlParameter("@EntityId", input.EntityId ))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description ))
+            command.Parameters.Add(New MySqlParameter("@longDescription", input.LongDescription ))
+            command.Parameters.Add(New MySqlParameter("@Visible", input.Visible.ToString ))
+            command.Parameters.Add(New MySqlParameter("@ActivationVerb", input.ActivationVerb ))
+            command.Parameters.Add(New MySqlParameter("@ActivationText", input.ActivationText ))
+            command.Parameters.Add(New MySqlParameter("@PointsAwarded", input.PointsAwarded.ToString ))
+            command.Parameters.Add(New MySqlParameter("@VerbUpdatesRoomState", input.VerbUpdatesRoomState.ToString ))
+            command.Parameters.Add(New MySqlParameter("@Hint", input.Hint ))
+            command.Parameters.Add(New MySqlParameter("@NextEntityStateId", input.NextEntityStateId ))
+            command.Parameters.Add(New MySqlParameter("@ItemIdRequiredforRoomStateUpdate", input.ItemIdRequiredforRoomStateUpdate ))
             MyBase.ExecuteCommand(command)
         End Sub
 

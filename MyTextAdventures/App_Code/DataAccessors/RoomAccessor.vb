@@ -1,4 +1,4 @@
-﻿Imports Microsoft.VisualBasic
+Imports Microsoft.VisualBasic
 Imports System.Data
 Namespace DAL
     Public Class RoomAccessor
@@ -6,17 +6,30 @@ Namespace DAL
 
         Private strSQL As String
         Public Sub Add(ByVal input As BE.Room)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.RoomId & _
-              "', '" + input.StoryId & _
-              "', '" + input.RoomName & _
-              "', '" + input.StartRoomStateId & _
-              "', '" + input.NorthRoomId & _
-              "', '" + input.EastRoomId & _
-              "', '" + input.SouthRoomId & _
-              "', '" + input.WestRoomId & _
+            strSQL = "INSERT INTO @inputTypeName" & _
+            strSQL += " VALUES ('@RoomId" & _
+              "', '@StoryId" & _
+              "', '@RoomName" & _
+              "', '@StartRoomStateId" & _
+              "', '@NorthRoomId" & _
+              "', '@EastRoomId" & _
+              "', '@SouthRoomId" & _
+              "', '@WestRoomId" & _
               "')"
-            MyBase.ExecuteCommand(strSQL)
+
+                Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@RoomId", input.RoomId))
+            command.Parameters.Add(New MySqlParameter("@StoryId", input.StoryId))
+            command.Parameters.Add(New MySqlParameter("@RoomName", input.RoomName))
+            command.Parameters.Add(New MySqlParameter("@StartRoomStateId", input.StartRoomStateId))
+            command.Parameters.Add(New MySqlParameter("@NorthRoomId", input.NorthRoomId))
+            command.Parameters.Add(New MySqlParameter("@EastRoomId", input.EastRoomId))
+            command.Parameters.Add(New MySqlParameter("@SouthRoomId", input.SouthRoomId))
+            command.Parameters.Add(New MySqlParameter("@WestRoomId", input.WestRoomId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetRoom(ByVal RoomId As String) As BE.Room
@@ -41,28 +54,45 @@ Namespace DAL
         End Function
 
         Public Function getRoomsbyStoryId(ByVal StoryId As String) As DataSet
-            Dim STRSQL As String = "SELECT R.* " & _
+            Dim strSQL As String = "SELECT R.* " & _
             "FROM Room AS R " & _
-            "WHERE R.StoryId = '" + StoryId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)            
+            "WHERE R.StoryId = '@StoryId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@StoryId", StoryId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Sub Update(ByVal input As BE.Room)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
+            strSQL = "UPDATE @inputTypeName "
             strSQL += "SET " & _
-            "RoomId='" + input.RoomId & _
-            "', StoryId='" + input.StoryId & _
-            "', RoomName='" + input.RoomName & _
-            "', StartRoomStateId='" + input.StartRoomStateId & _
-            "', NorthRoomId='" + input.NorthRoomId & _
-            "', EastRoomId='" + input.EastRoomId & _
-            "', SouthRoomId='" + input.SouthRoomId & _
-            "', WestRoomId='" + input.WestRoomId & _
-            "' WHERE RoomId='" + input.RoomId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            "RoomId='@RoomId" & _
+            "', StoryId='@StoryId" & _
+            "', RoomName='@RoomName" & _
+            "', StartRoomStateId='@StartRoomStateId" & _
+            "', NorthRoomId='@NorthRoomId" & _
+            "', EastRoomId='@EastRoomId" & _
+            "', SouthRoomId='@SouthRoomId" & _
+            "', WestRoomId='@WestRoomId" & _
+            "' WHERE RoomId='@RoomId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", input.GetType.Name.ToString))
+            command.Parameters.Add(New MySqlParameter("@RoomId", input.RoomId))
+            command.Parameters.Add(New MySqlParameter("@StoryId", input.StoryId))
+            command.Parameters.Add(New MySqlParameter("@RoomName", input.RoomName))
+            command.Parameters.Add(New MySqlParameter("@StartRoomStateId", input.StartRoomStateId))
+            command.Parameters.Add(New MySqlParameter("@NorthRoomId", input.NorthRoomId))
+            command.Parameters.Add(New MySqlParameter("@EastRoomId", input.EastRoomId))
+            command.Parameters.Add(New MySqlParameter("@SouthRoomId", input.SouthRoomId))
+            command.Parameters.Add(New MySqlParameter("@WestRoomId", input.WestRoomId))
+            command.Parameters.Add(New MySqlParameter("@RoomId", input.RoomId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
-    
+
 
         Public Overloads Sub Delete(ByVal roomid As String)
             MyBase.Delete(GetType(BE.Room), "RoomId", roomid)

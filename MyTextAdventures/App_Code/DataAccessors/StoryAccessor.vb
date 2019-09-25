@@ -1,24 +1,38 @@
-﻿Imports Microsoft.VisualBasic
+Imports Microsoft.VisualBasic
 Imports System.Data
 Namespace DAL
     Public Class StoryAccessor
         Inherits DataAccessor
-        'inherits all of dataaccessor's methods, so can just customise parameters and 
+        'inherits all of dataaccessor's methods, so can just customise parameters and
         'call it's methods
         Private strSQL As String
         Public Sub Add(ByVal input As BE.Story)
-            'piece together sql statement from input story's properties 
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.StoryId
-            strSQL += "', '" + input.StoryName
-            strSQL += "', '" + input.AuthorId
-            strSQL += "', '" + input.Description
-            strSQL += "', " + input.IsPublished.ToString
-            strSQL += ", '" + input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss") 'dates need to be read in in a certain way to be entered correctly into database
-            strSQL += "', '" + input.PublishedOn.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "', '" + input.StartRoomId
+            'piece together sql statement from input story's properties
+            strSQL = "INSERT INTO @inputTypeName"
+            strSQL += " VALUES ('@StoryId"
+            strSQL += "', @StoryName
+            strSQL += "', @AuthorId
+            strSQL += "', @Description
+            strSQL += "', @IsPublished"
+            strSQL += ", @CreatedOn"
+            strSQL += "', @PublishedOn"
+            strSQL += "', @StartRoomId"
             strSQL += "')"
-            MyBase.ExecuteCommand(strSQL)
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@StoryId", input.StoryId))
+            command.Parameters.Add(New MySqlParameter("@StoryName", input.StoryName))
+            command.Parameters.Add(New MySqlParameter("@AuthorId", input.AuthorId))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description))
+            command.Parameters.Add(New MySqlParameter("@IsPublished", input.IsPublished.ToString))
+            command.Parameters.Add(New MySqlParameter("@CreatedOn", input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss") 'dates need to be read in in a certain way to be entered correctly into database
+            command.Parameters.Add(New MySqlParameter("@PublishedOn", input.PublishedOn.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@StartRoomId", input.StartRoomId))
+            strSQL += "')"
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetStory(ByVal StoryId As String) As BE.Story
@@ -49,39 +63,55 @@ Namespace DAL
 
         Public Function getStoriesByAuthorId(ByVal AuthorId As String) As DataSet
             'custom dataset request, so build sql string, including joins, manually
-            Dim STRSQL As String = "SELECT S.*, A.AuthorId, A.UserName " & _
+            Dim strSQL As String = "SELECT S.*, A.AuthorId, A.UserName " & _
             "FROM Story AS S " & _
             "INNER JOIN author AS A ON " & _
             "A.AuthorId = S.AuthorId " & _
-            "WHERE S.AuthorId = '" + AuthorId + "'"
-            Return MyBase.GetObjectDataSet(STRSQL)
-            ' Dim mysql As New MySql.Data.MySqlClient.MySqlCommand
+            "WHERE S.AuthorId = '@AuthorId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@AuthorId", AuthorId))
+            Return MyBase.GetObjectDataSet(command)
         End Function
 
         Public Function getPublishedStories() As DataSet
             ' no need for parameters as shows all published stories regardless of author
-            Dim STRSQL As String = "SELECT S.*, A.AuthorId, A.UserName " & _
+            Dim strSQL As String = "SELECT S.*, A.AuthorId, A.UserName " & _
             "FROM Story AS S " & _
             "INNER JOIN author AS A ON " & _
             "A.AuthorId = S.AuthorId " & _
             "WHERE S.IsPublished = 1"
-            Return MyBase.GetObjectDataSet(STRSQL)
+            Return MyBase.GetObjectDataSet(strSQL)
         End Function
 
         Public Sub Update(ByVal input As BE.Story)
 
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
+            strSQL = "UPDATE @inputTypeName "
             strSQL += "SET "
-            strSQL += "StoryId='" + input.StoryId
-            strSQL += "', StoryName='" + input.StoryName
-            strSQL += "', AuthorId='" + input.AuthorId
-            strSQL += "', Description='" + input.Description
-            strSQL += "', IsPublished=" + input.IsPublished.ToString
-            strSQL += ", CreatedOn='" + input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "', PublishedOn='" + input.PublishedOn.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "', StartRoomId='" + input.StartRoomId
-            strSQL += "' WHERE StoryId='" + input.StoryId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            strSQL += "StoryId='@StoryId'"
+            strSQL += "', StoryName='@StoryName'"
+            strSQL += "', AuthorId='@AuthorId'"
+            strSQL += "', Description='@Description'"
+            strSQL += "', IsPublished=@IsPublished'"
+            strSQL += ", CreatedOn='@CreatedOn'"
+            strSQL += "', PublishedOn='@PublishedOn'"
+            strSQL += "', StartRoomId='@StartRoomId'"
+            strSQL += "' WHERE StoryId='@StoryId'"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@StoryId", input.StoryId))
+            command.Parameters.Add(New MySqlParameter("@StoryName", input.StoryName))
+            command.Parameters.Add(New MySqlParameter("@AuthorId", input.AuthorId))
+            command.Parameters.Add(New MySqlParameter("@Description", input.Description))
+            command.Parameters.Add(New MySqlParameter("@IsPublished",input.IsPublished.ToString))
+            command.Parameters.Add(New MySqlParameter("@CreatedOn", input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@PublishedOn", input.PublishedOn.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@StartRoomId", input.StartRoomId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Sub setPublished(ByVal StoryId As String, ByVal makePublished As Boolean)

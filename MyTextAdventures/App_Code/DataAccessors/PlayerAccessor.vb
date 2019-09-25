@@ -8,17 +8,28 @@ Namespace DAL
 
         Private strSQL As String
         Public Sub Add(ByVal input As BE.Player)
-            strSQL = "INSERT INTO " + input.GetType.Name.ToString
-            strSQL += " VALUES ('" + input.PlayerId
-            strSQL += "', '" + input.PlayerFirstName
-            strSQL += "', '" + input.PlayerLastName
-            strSQL += "', '" + input.AuthorId
-            strSQL += "', '" + input.CurrentRoomId
-            strSQL += "', " + input.Points.ToString
-            strSQL += ", '" + input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "', '" + input.LastPlayed.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "')"
-            MyBase.ExecuteCommand(strSQL)
+            strSQL = "INSERT INTO @inputTypeName"
+            " VALUES ('@PlayerId" & _
+            "', '@PlayerFirstName" & _
+            "', '@PlayerLastName" & _
+            "', '@AuthorId" & _
+            "', '@CurrentRoomId" & _
+            "', @Points" & _
+            ", '@CreatedOn" & _
+            "', '@LastPlayed" & _
+            "')"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@PlayerFirstName", input.PlayerFirstName))
+            command.Parameters.Add(New MySqlParameter("@PlayerLastName", input.PlayerLastName))
+            command.Parameters.Add(New MySqlParameter("@AuthorId", input.AuthorId))
+            command.Parameters.Add(New MySqlParameter("@CurrentRoomId", input.CurrentRoomId))
+            command.Parameters.Add(New MySqlParameter("@Points", input.Points.ToString))
+            command.Parameters.Add(New MySqlParameter("@CreatedOn", input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@LastPlayed", input.LastPlayed.ToString("yyyy-MM-dd HH:mm:ss")))
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Function GetPlayer(ByVal PlayerId As String) As BE.Player
@@ -48,8 +59,11 @@ Namespace DAL
             Dim outputPlayer As New BE.Player
             Dim STRSQL As String = "SELECT P.* " & _
             "FROM Player AS P " & _
-            "WHERE P.AuthorId = '" + AuthorId + "'"
-            playerDataSet = MyBase.GetObjectDataSet(STRSQL)
+            "WHERE P.AuthorId = '@AuthorId'"
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@AuthorId", AuthorId))
+            playerDataSet = MyBase.GetObjectDataSet(command)
             If playerDataSet.Tables(0).Rows.Count = 0 Then
                 Return Nothing
             Else
@@ -68,17 +82,29 @@ Namespace DAL
         End Function
 
         Public Sub Update(ByVal input As BE.Player)
-            strSQL = "UPDATE " + input.GetType.Name.ToString + " "
-            ' strSQL += "SET UserName='" + input.UserName
-            strSQL += "SET PlayerFirstName='" + input.PlayerFirstName
-            strSQL += "', PlayerLastName='" + input.PlayerLastName
-            strSQL += "', AuthorId='" + input.AuthorId
-            strSQL += "', CurrentRoomId='" + input.CurrentRoomId
-            strSQL += "', Points=" + input.Points.ToString
-            strSQL += ", CreatedOn='" + input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "', LastPlayed='" + input.LastPlayed.ToString("yyyy-MM-dd HH:mm:ss")
-            strSQL += "' WHERE playerid='" + input.PlayerId + "'"
-            MyBase.ExecuteCommand(strSQL)
+            strSQL = "UPDATE @inputTypeName "
+            strSQL += "SET PlayerFirstName='@PlayerFirstName"
+            strSQL += "', PlayerLastName='@PlayerLastName"
+            strSQL += "', AuthorId='@AuthorId"
+            strSQL += "', CurrentRoomId='@CurrentRoomId"
+            strSQL += "', Points=@Points"
+            strSQL += ", CreatedOn='@CreatedOn"
+            strSQL += "', LastPlayed='@LastPlayed"
+            strSQL += "' WHERE playerid='@PlayerId"
+
+            Dim command As New MySql.Data.MySqlClient.MySqlCommand
+            command.CommandText = strSQL
+            command.Parameters.Add(New MySqlParameter("@inputTypeName", inputType.Name))
+            command.Parameters.Add(New MySqlParameter("@PlayerFirstName", input.PlayerFirstName))
+            command.Parameters.Add(New MySqlParameter("@PlayerLastName", input.PlayerLastName))
+            command.Parameters.Add(New MySqlParameter("@AuthorId", input.AuthorId))
+            command.Parameters.Add(New MySqlParameter("@CurrentRoomId", input.CurrentRoomId))
+            command.Parameters.Add(New MySqlParameter("@Points", input.Points.ToString))
+            command.Parameters.Add(New MySqlParameter("@CreatedOn", input.CreatedOn.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@LastPlayed", input.LastPlayed.ToString("yyyy-MM-dd HH:mm:ss")))
+            command.Parameters.Add(New MySqlParameter("@PlayerId", input.PlayerId))
+
+            MyBase.ExecuteCommand(command)
         End Sub
 
         Public Overloads Sub Delete(ByVal playerid As String)
